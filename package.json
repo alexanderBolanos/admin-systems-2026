@@ -1,0 +1,27 @@
+{
+  "name": "admin-systems-2026",
+  "version": "1.0.0",
+  "description": "Proyecto de pruebas del curso Administracion de Sistemas",
+  "homepage": "https://github.com/alexanderBolanos/admin-systems-2026#readme",
+  "bugs": {
+    "url": "https://github.com/alexanderBolanos/admin-systems-2026/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexanderBolanos/admin-systems-2026.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "ci": "return 0",
+    "build": "return 0"
+  },
+  "dependencies": {
+    "express": "^4.22.3"
+  }
+}
