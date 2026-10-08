@@ -17,4 +17,4 @@ jobs:
     steps:
     - name: 'Hola mundo'
       run: |
-        echo: 'hola ${APP}'
+        echo: 'hola mundo'
