@@ -1,0 +1,20 @@
+on:
+  workflow_run:
+    workflows: ["Node.js CI"]
+    types:
+      - completed
+  workflow_dispatch:
+
+name: Build and Deploy to AWS
+
+env:
+  APP: admin-systems-2026
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Hola mundo'
+      run: |
+        echo: 'hola ${APP}'
