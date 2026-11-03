@@ -1,4 +1,5 @@
 # admin-systems-2026
+[![Dependabot Updates](https://github.com/alexanderBolanos/admin-systems-2026/actions/workflows/dependabot/dependabot-updates/badge.svg?branch=main)](https://github.com/alexanderBolanos/admin-systems-2026/actions/workflows/dependabot/dependabot-updates)
 
 Proyecto de pruebas del curso Administración de Sistemas.
 
