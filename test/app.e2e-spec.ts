@@ -87,4 +87,25 @@ describe("AppModule (e2e)", () => {
     expect(Array.isArray(response.body)).toBe(true);
     expect(response.body.length).toBeGreaterThan(0);
   });
+
+  describe("GET /productos/:id", () => {
+    it("devuelve el producto cuando existe", async () => {
+      const creado = await request(app.getHttpServer())
+        .post("/productos")
+        .send({ nombre: "Monitor", precio: 900, stock: 2 });
+
+      const response = await request(app.getHttpServer()).get(
+        `/productos/${creado.body.id}`,
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body).toMatchObject({ nombre: "Monitor", precio: 900, stock: 2 });
+    });
+
+    it("devuelve 404 cuando el producto no existe", async () => {
+      const response = await request(app.getHttpServer()).get("/productos/999999");
+
+      expect(response.status).toBe(404);
+    });
+  });
 });

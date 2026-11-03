@@ -15,36 +15,51 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
         with:
           # Disabling shallow clone is recommended for improving the relevancy of reporting.
           fetch-depth: 0
 
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: "npm"
+
+      - run: npm ci --ignore-scripts
+
+      # Genera cobertura (coverage/lcov.info) para que SonarCloud reporte métricas reales.
+      - name: Run unit tests with coverage
+        run: npm run test:cov
+
+      - name: Run e2e tests
+        run: npm run test:e2e
+
       # Triggering SonarQube analysis; the results are required for the Quality Gate check.
       - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@master
+        uses: SonarSource/sonarqube-scan-action@v8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: https://sonarcloud.io
 
       # Check the Quality Gate status.
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
-        uses: sonarsource/sonarqube-quality-gate-action@master
+        uses: SonarSource/sonarqube-quality-gate-action@v1
         # Enforce a timeout to fail the step after a specific time.
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} #OPTIONAL
+          SONAR_HOST_URL: https://sonarcloud.io
 
       - name: SonarQube Pull Request Comment
-        if: always()
-        uses: campos-pay/sonarqube-pr-comment@main
+        if: always() && github.event_name == 'pull_request'
+        uses: campos-pay/sonarqube-pr-comment@v0.1.5
         with:
           sonar_token: ${{ secrets.SONAR_TOKEN }}
-          sonar_host_url: ${{ secrets.SONAR_HOST_URL }}
-          sonar_projectkey: ${{ github.event.repository.name }}
+          sonar_host_url: https://sonarcloud.io
+          sonar_projectkey: ${{ vars.SONAR_PROJECT_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           repo_name: ${{ github.repository }}
           pr_number: ${{ github.event.pull_request.number }}
-          github_api_base_url: "https://ourselfhostedgithub.com/api/v3" # If using github.com do this > github_api_base_url: ""
+          github_api_base_url: "" # repo en github.com, no self-hosted
