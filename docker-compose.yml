@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: admin-systems-app
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+    networks:
+      - vpc
+    depends_on:
+      - sqlite
+
+  sqlite:
+    image: coleifer/sqlite-web:latest
+    container_name: admin-systems-sqlite
+    environment:
+      SQLITE_DATABASE: /data/database.db
+    ports:
+      - "8080:8080"
+    volumes:
+      - sqlite-data:/data
+    networks:
+      - vpc
+
+# Red dedicada del stack, aislada de otras redes de Docker en el host
+# (equivalente conceptual a una VPC: los servicios se resuelven entre sí
+# por nombre, ej. http://sqlite:8080, y quedan aislados del exterior salvo
+# los puertos publicados explícitamente arriba).
+networks:
+  vpc:
+    driver: bridge
+    name: admin-systems-vpc
+
+volumes:
+  sqlite-data:
