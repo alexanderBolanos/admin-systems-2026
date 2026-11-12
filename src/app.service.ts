@@ -9,4 +9,10 @@ export class AppService {
   getHolaMundo(): string {
     return "Hola Mundo";
   }
+
+  getSaludo(nombre: string): string {
+    const saludo = "Hola " + nombre;
+    console.log(saludo);
+    return saludo;
+  }
 }
