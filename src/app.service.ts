@@ -13,5 +13,6 @@ export class AppService {
   getSaludo(nombre: string): string {
     const saludo = "Hola " + nombre;
     console.log(saludo);
+    return saludo;
   }
 }
