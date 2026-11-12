@@ -36,6 +36,21 @@ describe("AppModule (e2e)", () => {
     expect(response.text).toBe("API funcionando");
   });
 
+  describe("GET /saludo", () => {
+    it("devuelve el saludo cuando se pasa el query param nombre", async () => {
+      const response = await request(app.getHttpServer()).get("/saludo?nombre=Alex");
+
+      expect(response.status).toBe(200);
+      expect(response.text).toBe("Hola Alex");
+    });
+
+    it("devuelve 400 cuando falta el query param nombre", async () => {
+      const response = await request(app.getHttpServer()).get("/saludo");
+
+      expect(response.status).toBe(400);
+    });
+  });
+
   describe("POST /productos (class-validator)", () => {
     it("crea un producto con datos válidos", async () => {
       const response = await request(app.getHttpServer())
